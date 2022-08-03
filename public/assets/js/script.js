@@ -1,7 +1,6 @@
 /**
  *  Steps handler
  */
-
 var Steps = {};
 
 Steps.init = function() {
@@ -106,6 +105,7 @@ ParseRequest.postCloudCodeData = function() {
     	Steps.fillStepError('#step-3-error', 'There was a failure: ' + error);
     });  
   XHR.POST('/parse/functions/hello');
+  // XHR.POST('/parse/userFunction/create-new-user')
 }
 
 

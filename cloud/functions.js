@@ -1,3 +1,5 @@
+//get the product  form Mongodb
+
 Parse.Cloud.define('hello', req => {
   req.log.info(req);
   return 'Hi';
@@ -8,6 +10,7 @@ Parse.Cloud.define('asyncFunction', async req => {
   req.log.info(req);
   return 'Hi async';
 });
+
 
 Parse.Cloud.beforeSave('Test', () => {
   throw new Parse.Error(9001, 'Saving test objects is not available.');
