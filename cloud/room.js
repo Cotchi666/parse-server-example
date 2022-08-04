@@ -25,8 +25,10 @@ Parse.Cloud.define('get-room-byname', async req => {
           const name = req.params.name;
           var query =  new Parse.Query(Room)
           var room =  query.equalTo('name', name);
+          query.include('parent')
           let result =  await room.find();
-
+         
+          
           // for(let i = 0; i< result.length; i++){
           //     var thisRoom = result[i];   
           // }
