@@ -10,7 +10,6 @@ Parse.Cloud.define('create-new-renthouse', async req => {
   await rentHouse.save(data, {
     success: function (obj) {
       console.log('Saved successfully'  , obj.id);
-      
     },
     error: function (err) {
       console.log(err);

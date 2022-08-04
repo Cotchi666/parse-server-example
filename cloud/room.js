@@ -28,11 +28,6 @@ Parse.Cloud.define('get-room-byname', async req => {
   var room = query.equalTo('name', name);
   query.include('parent');
   let result = await room.find();
-
-  // for(let i = 0; i< result.length; i++){
-  //     var thisRoom = result[i];
-  // }
-  // var c = thisRoom
   return result;
 });
 
@@ -43,7 +38,6 @@ Parse.Cloud.define('create-ordered-room', async req => {
 
 //create a room when a customer order
 Parse.Cloud.define('delete-room-by-name', async req => {
-
   //get data from client
   const name = req.params.name;
   //declare query

@@ -74,11 +74,10 @@ Parse.Cloud.define('update-ordered-room-for-user', async req => {
   var query = new Parse.Query(User);
   // get obj room by id
   var room = await q.get(req.params.room.objectId);
-
   //check username
   query.equalTo('username', req.params.username);
   //update room obj at user obj
-  var user = await query.first().then(function (obj) {
+  await query.first().then(function (obj) {
     obj.set('room', room);
     obj.save(null, { useMasterKey: true });
   });
