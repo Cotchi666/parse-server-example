@@ -61,11 +61,11 @@ const User = new Parse.User();
 const Room = Parse.Object.extend('Room');
 
 Parse.Cloud.define('create-new-user', async req => {
-  // User.set("username", "chien");
-  // User.set("password", '12345678');
-  // User.set("email", "chien@gmail.com")
+  User.set("username", req.params.username);
+  User.set("password", req.params.password);
+  User.set("email", req.params.email)
 
-  // await User.save()
+  await User.save()
 
   return 'OK';
 });
@@ -79,28 +79,7 @@ Parse.Cloud.define('find-user', async req => {
   return 'OK';
 });
 //create user with room id
-Parse.Cloud.define('create-ordered-room-for-user', async req => {
-  //const name = req.params.name;
-  const RoomId = req.params.objectId;
-  const username = req.params.username;
-  const password = req.params.password;
-  if (!RoomId) {
-    User.set('username', username);
-    User.set('password', password);
-    // const email = req.params.email;
-    User.save();
-  } else {
-    var q = new Parse.Query('Room');
-    var foundRoom = await q.get(RoomId);
-    User.set('username', username);
-    User.set('password', password);
-    // User.set('email', email);
-    User.set('room', foundRoom);
-    User.save();
-  }
 
-  return 'ok';
-});
 //update user with room id
 Parse.Cloud.define('update-ordered-room-for-user', async req => {
   console.log('check data',req.params.room.objectId)
