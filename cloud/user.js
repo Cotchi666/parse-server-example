@@ -61,56 +61,48 @@ const User = new Parse.User();
 const Room = Parse.Object.extend('Room');
 
 Parse.Cloud.define('create-new-user', async req => {
-
-  User.set("username", req.params.username);
-  User.set("password", req.params.password);
-  User.set("email", req.params.email)
-
-  await User.save()
-
+  User.set('username', req.params.username);
+  User.set('password', req.params.password);
+  User.set('email', req.params.email);
+  await User.save();
   return 'OK';
 });
-Parse.Cloud.define('find-user', async req => {
-  // User.set("username", "chien");
-  // User.set("password", '12345678');
-  // User.set("email", "chien@gmail.com")
 
-  // await User.save()
-
-  return 'OK';
-});
 //update user with room id
 Parse.Cloud.define('update-ordered-room-for-user', async req => {
-  console.log('check data',req.params.room.objectId)
   var q = new Parse.Query(Room);
+  var query = new Parse.Query(User);
+  // get obj room by id
   var room = await q.get(req.params.room.objectId);
 
-  var query = new Parse.Query(User);
+  //check username
   query.equalTo('username', req.params.username);
-
-  var user = await query.first().then(function(obj){
+  //update room obj at user obj
+  var user = await query.first().then(function (obj) {
     obj.set('room', room);
     obj.save(null, { useMasterKey: true });
-  
   });
- console.log(user)
-
   return 'ok';
 });
 
-
+//get user by id
 Parse.Cloud.define('get-user-by-id', async req => {
-  // User.set("username", "chien");
-  // User.set("password", '12345678');
-  // User.set("email", "chien@gmail.com")
-
-  // await User.save()
-
   var q = new Parse.Query(User);
-  q.include('room.parent')
+  // return full User's data
+  q.include('room.parent');
   var room = await q.get(req.params.objectId);
-  
-  
-  console.log(room)
   return room;
+});
+
+//find user by name or id
+Parse.Cloud.define('find-user', async req => {
+  if (req.params.username) {
+    var query = new Parse.Query(User);
+    query.equalTo('username', req.params.username);
+    var result = await query.first();
+  } else {
+    var q = new Parse.Query(User);
+    var result = await q.get(req.params.objectId);
+  }
+  return result;
 });
