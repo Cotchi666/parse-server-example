@@ -61,6 +61,7 @@ const User = new Parse.User();
 const Room = Parse.Object.extend('Room');
 
 Parse.Cloud.define('create-new-user', async req => {
+
   User.set("username", req.params.username);
   User.set("password", req.params.password);
   User.set("email", req.params.email)
@@ -78,13 +79,12 @@ Parse.Cloud.define('find-user', async req => {
 
   return 'OK';
 });
-//create user with room id
-
 //update user with room id
 Parse.Cloud.define('update-ordered-room-for-user', async req => {
   console.log('check data',req.params.room.objectId)
   var q = new Parse.Query(Room);
   var room = await q.get(req.params.room.objectId);
+
   var query = new Parse.Query(User);
   query.equalTo('username', req.params.username);
 
@@ -96,4 +96,21 @@ Parse.Cloud.define('update-ordered-room-for-user', async req => {
  console.log(user)
 
   return 'ok';
+});
+
+
+Parse.Cloud.define('get-user-by-id', async req => {
+  // User.set("username", "chien");
+  // User.set("password", '12345678');
+  // User.set("email", "chien@gmail.com")
+
+  // await User.save()
+
+  var q = new Parse.Query(User);
+  q.include('room.parent')
+  var room = await q.get(req.params.objectId);
+  
+  
+  console.log(room)
+  return room;
 });
