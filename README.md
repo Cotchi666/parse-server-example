@@ -214,4 +214,9 @@ You can change the server URL in all of the open-source SDKs, but we're releasin
 [license-svg]: https://img.shields.io/badge/license-BSD-lightgrey.svg
 [license-link]: LICENSE
 [open-collective-link]: https://opencollective.com/parse-server
+
+
+
+start mongo on MACOS
+source ~/.bashrc  
 mongod --dbpath ~/Documents/test-mongodb-data

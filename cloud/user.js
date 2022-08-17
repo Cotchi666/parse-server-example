@@ -64,6 +64,7 @@ Parse.Cloud.define('create-new-user', async req => {
   User.set('username', req.params.username);
   User.set('password', req.params.password);
   User.set('email', req.params.email);
+
   await User.save();
   return 'OK';
 });
@@ -104,4 +105,9 @@ Parse.Cloud.define('find-user', async req => {
     var result = await q.get(req.params.objectId);
   }
   return result;
+});
+Parse.Cloud.define('login', async req => {
+  const res = await Parse.User.logIn(req.params.email, req.params.password);
+  const data = res
+  return data;
 });

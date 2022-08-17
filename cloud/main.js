@@ -4,3 +4,4 @@ require('./functions.js');
 require('./user');
 require('./rent-house')
 require('./room')
+require('./test')
