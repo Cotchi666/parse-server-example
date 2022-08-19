@@ -1,5 +1,6 @@
 const Order = Parse.Object.extend('Order');
-const Room = Parse.Object.extend('Room')
+const Room = Parse.Object.extend('Room');
+
 Parse.Cloud.define('payment', req => {
   var q = new Parse.Query(Order);
   q.equalTo('objectId', req.params.objectId);
@@ -18,21 +19,6 @@ Parse.Cloud.define('PAYPAL', (req, res) => {
   arr.push(a);
   return arr;
 });
-
-// const User = Parse.User({
-//   // Instance methods
-//   hasSuperHumanStrength: function (objectId) {
-//     return this.get("objectId") = objectId;
-//   }})
-
-// Parse.Cloud.define('order', req => {
-// const user = User.hasSuperHumanStrength(req.params.user_id)
-//  console.log("user", user)
-
-//   //query
-// ;
-//   });
-// const User = Parse.User()
 
 Parse.Cloud.define('order', async req => {
   const query = new Parse.Query(Parse.User);
@@ -64,8 +50,22 @@ Parse.Cloud.define('get-order', async req => {
   const room_id = await qr.first();
   const queryOrder = new Parse.Query(Order);
   queryOrder.equalTo('room_id', room_id);
-  queryOrder.include('room_id.parent')
+  queryOrder.include('room_id.parent');
   const objOrder = await queryOrder.first();
+  console.log('objjjjj', objOrder);
+  return objOrder;
+});
+
+Parse.Cloud.define('get-order-mine', async req => {
+
+  const qr = new Parse.Query(Parse.User);
+  qr.equalTo('objectId', req.params.user_id);
+  const user_id = await qr.first();
+
+  const queryOrder = new Parse.Query(Order);
+  queryOrder.equalTo('user_id', user_id);
+  const objOrder = await queryOrder.first();
+  
   console.log('objjjjj', objOrder);
   return objOrder;
 });
