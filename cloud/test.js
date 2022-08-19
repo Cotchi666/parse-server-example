@@ -1,33 +1,5 @@
 const Order = Parse.Object.extend('Order');
-
-// Parse.Cloud.define('order', req => {
-//   const order = new Order();
-//   const fullName = req.params.fullName;
-//   const phone = req.params.phone;
-//   const email = req.params.email;
-//   const room_id = req.params.room_id;
-//   const paymentMethod = req.params.paymentMethod;
-//   const user_id = req.params.user_id;
-
-//   var qu = new Parse.Query('User');
-
-//   var q = new Parse.Query('Room');
-//   //query
-//   q.equalTo('objectId', room_id);
-//   q.first().then(function (obj) {
-//     console.log(obj.attributes);
-
-//     order.set('fullName', fullName);
-//     order.set('email', email);
-//     order.set('phone', phone);
-//     order.set('paymentMethod', paymentMethod);
-//     order.set('room_id', obj);
-//     // order.set('user_id', userObj);
-//     order.save();
-//   });
-
-//   return 'OK';
-// });
+const Room = Parse.Object.extend('Room')
 Parse.Cloud.define('payment', req => {
   var q = new Parse.Query(Order);
   q.equalTo('objectId', 'r1po6q4czp');
@@ -68,19 +40,32 @@ Parse.Cloud.define('order', async req => {
   const objUser = await query.first();
   const order = new Order();
   var q = new Parse.Query('Room');
-  
+
   q.equalTo('objectId', req.params.room_id);
   q.first().then(function (obj) {
-    console.log("checking",obj);
+    console.log('checking', obj);
 
     order.set('fullName', req.params.fullName);
     order.set('email', req.params.email);
     order.set('phone', req.params.phone);
     order.set('paymentMethod', req.params.paymentMethod);
+    order.set('isPaid', false);
     order.set('room_id', obj);
     order.set('user_id', objUser);
     order.save();
   });
 
   return objUser;
+});
+
+Parse.Cloud.define('get-order', async req => {
+  const qr = new Parse.Query(Room);
+  qr.equalTo('objectId', req.params.room_id);
+  const room_id = await qr.first();
+  const queryOrder = new Parse.Query(Order);
+  queryOrder.equalTo('room_id', room_id);
+  queryOrder.include('room_id.parent')
+  const objOrder = await queryOrder.first();
+  console.log('objjjjj', objOrder);
+  return objOrder;
 });
