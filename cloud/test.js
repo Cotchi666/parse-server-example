@@ -2,7 +2,7 @@ const Order = Parse.Object.extend('Order');
 const Room = Parse.Object.extend('Room')
 Parse.Cloud.define('payment', req => {
   var q = new Parse.Query(Order);
-  q.equalTo('objectId', 'r1po6q4czp');
+  q.equalTo('objectId', req.params.objectId);
   const a = q.first().then(obj => {
     obj.set('isPaid', true);
     obj.save();
