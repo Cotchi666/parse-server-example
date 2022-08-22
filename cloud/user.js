@@ -108,6 +108,18 @@ Parse.Cloud.define('find-user', async req => {
 });
 Parse.Cloud.define('login', async req => {
   const res = await Parse.User.logIn(req.params.email, req.params.password);
-  const data = res
+  const data = res;
+  return data;
+});
+Parse.Cloud.define('update-user', async req => {
+  const userQuery = new Parse.Query(Parse.User);
+  userQuery.equalTo('objectId', req.params.objectId);
+  const data = await userQuery.first().then(function (obj) {
+    obj.set('username', req.params.username);
+    obj.set('password', req.params.password);
+    obj.set('email', req.params.email);
+    obj.save(null, { useMasterKey: true });
+    return obj.attributes
+  });
   return data;
 });
