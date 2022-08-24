@@ -21,16 +21,6 @@ Parse.Cloud.define('create-new-room', req => {
   return 'Created a new room  successfully';
 });
 
-// //get room by name
-// Parse.Cloud.define('get-room-byname', async req => {
-//   const name = req.params.name;
-//   var query = new Parse.Query(Room);
-//   var room = query.equalTo('name', name);
-//   query.include('parent');
-//   let result = await room.find();
-//   return result;
-// });
-
 //create a room when a customer order
 Parse.Cloud.define('create-ordered-room', async req => {
   return result;
@@ -63,26 +53,50 @@ Parse.Cloud.define('get-room-id', async req => {
   // //  req.parram.objectId1
 
   var query = new Parse.Query(Room);
-  query.contains('parent','VEKZbIMrDP' );
-  const a = (await query.count()).toString()
-  count.push(a)
+  query.contains('parent', 'VEKZbIMrDP');
+  const a = (await query.count()).toString();
+  count.push(a);
 
   // console.log("a", a
-  console.log("check out",a)
-
+  console.log('check out', a);
 
   var query2 = new Parse.Query(Room);
   query2.contains('parent', 'N5POngLfKz');
-  const b = (await query2.count()).toString()
+  const b = (await query2.count()).toString();
   // count.push(b);
-  count.push(b)
+  count.push(b);
 
   var query3 = new Parse.Query(Room);
   query3.contains('parent', 'gyAvGiV70d');
-  const c = (await query3.count()).toString()
+  const c = (await query3.count()).toString();
   // count.push(b);
-  count.push(c)
+  count.push(c);
 
+  return count;
+});
+//get room by name
 
-    return count
+Parse.Cloud.define('get-room-by-name', async req => {
+  const name = req.params.name;
+  var query = new Parse.Query(Room);
+  var room = query.equalTo('name', name);
+  query.include('parent');
+  let result = await room.find();
+  return result;
+});
+Parse.Cloud.define('get-room-cate', async req => {
+  const cate = req.params.categoryId;
+
+  var queryC = new Parse.Query('Category');
+  queryC.equalTo('objectId', cate);
+  const objC = await queryC.first();
+  console.log('object C', objC);
+
+  var query = new Parse.Query(Room);
+  query.equalTo('cate', objC);
+  query.include('cate');
+  query.include('parent');
+  const data = await query.find();
+  console.log('data', data);
+  return data;
 });
